@@ -7,7 +7,7 @@ class Plant:
         self._height += 1
         print(f"{self._name} grew 1cm")
 
-    def describe(self):
+    def __str__(self):
         return f"- {self._name}: {self._height}cm"
 
 
@@ -17,7 +17,7 @@ class FloweringPlant(Plant):
         self._color = color
         self._blooming = True
 
-    def describe(self):
+    def __str__(self):
         return (
             f"- {self._name}: {self._height}cm, {self._color}"
             f"flowers (blooming)"
@@ -29,7 +29,7 @@ class PrizeFlower(FloweringPlant):
         super().__init__(name, height, color)
         self._points = points
 
-    def describe(self):
+    def __str__(self):
         return (
             f"- {self._name}: {self._height}cm, {self._color} "
             f"flowers (blooming), Prize points: {self._points}"
@@ -54,7 +54,7 @@ class Garden:
         print(f"=== {self.owner}'s Garden Report ===")
         print("Plants in garden:")
         for plant in self.plants:
-            print(plant.describe())
+            print(plant)
 
         regular, flowering, prize = stats_helper.count_types(self.plants)
 
@@ -70,8 +70,6 @@ class GardenManager:
     gardens = []
 
     class GardenStats:
-
-        @staticmethod
         def count_types(plants):
             regular = flowering = prize = 0
             for plant in plants:
@@ -82,15 +80,15 @@ class GardenManager:
                 else:
                     regular += 1
             return regular, flowering, prize
+        count_types = staticmethod(count_types)
 
     def add_garden(self, garden):
         self.gardens.append(garden)
 
-    @classmethod
     def total_gardens(cls):
         return len(cls.gardens)
+    total_gardens = classmethod(total_gardens)
 
-    @classmethod
     def create_garden_network(cls):
         scores = {}
         for garden in cls.gardens:
@@ -101,16 +99,16 @@ class GardenManager:
                     score += plant._points
             scores[garden.owner] = score
         return scores
+    create_garden_network = classmethod(create_garden_network)
 
-    @staticmethod
     def validate_height(height):
         return height >= 0
+    validate_height = staticmethod(validate_height)
 
 
 print("=== Garden Management System Demo ===")
-
+print()
 manager = GardenManager()
-
 alice = Garden("Alice")
 bob = Garden("Bob")
 
@@ -120,10 +118,11 @@ manager.add_garden(bob)
 alice.add_plant(Plant("Oak Tree", 100))
 alice.add_plant(FloweringPlant("Rose", 25, "red"))
 alice.add_plant(PrizeFlower("Sunflower", 50, "yellow", 10))
-
+print()
 alice.grow_all()
+print()
 alice.report(GardenManager.GardenStats)
-
+print()
 print("Height validation test:", GardenManager.validate_height(10))
 
 scores = GardenManager.create_garden_network()
