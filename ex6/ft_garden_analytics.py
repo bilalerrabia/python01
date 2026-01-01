@@ -57,7 +57,7 @@ class Garden:
             print(plant)
 
         regular, flowering, prize = stats_helper.count_types(self.plants)
-
+        print()
         print(f"Plants added: {len(self.plants)},", end="")
         print(f"Total growth: {len(self.plants)}cm")
         print(
@@ -117,8 +117,11 @@ manager.add_garden(bob)
 
 alice.add_plant(Plant("Oak Tree", 100))
 alice.add_plant(FloweringPlant("Rose", 25, "red"))
-alice.add_plant(PrizeFlower("Sunflower", 50, "yellow", 10))
+alice.add_plant(PrizeFlower("Sunflower", 80, "yellow", 10))
 print()
+bob.add_plant(Plant("tomato", 91))
+
+bob.grow_all()
 alice.grow_all()
 print()
 alice.report(GardenManager.GardenStats)
